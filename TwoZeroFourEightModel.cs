@@ -11,6 +11,7 @@ namespace twozerofoureight
         protected int boardSize; // default is 4
         protected int[,] board;
         protected Random rand;
+        protected bool CanRand = true;
 
         public TwoZeroFourEightModel() : this(4)
         {
@@ -27,27 +28,66 @@ namespace twozerofoureight
             boardSize = size;
             board = new int[boardSize, boardSize];
             var range = Enumerable.Range(0, boardSize);
-            foreach(int i in range) {
-                foreach(int j in range) {
-                    board[i,j] = 0;
+            foreach (int i in range)
+            {
+                foreach (int j in range)
+                {
+                    board[i, j] = 0;
                 }
             }
             rand = new Random();
             board = Random(board);
             NotifyAll();
         }
+        private bool CannotRand(int[,] board)
+        {
+            for (int i = 0; i < boardSize; i++)
+            {
+                for (int j = 0; j < boardSize; j++)
+                {
+                    if (board[i, j] == 0)
+                    {
+                        return false;
+                    }
+                }
+            }    
+            return true;
+        }
+        private bool checknear()
+        {
+            for(int i = 0; i < boardSize; i++)
+            {
+                try
+                {
+                    for(int j = 0; j < boardSize; j++)
+                    {
+                        if(board[i,j]==board[i+1,j]|| board[i, j] == board[i , j + 1])
+                        {
+                            return false;
+                        }
+                    }
+                }
+                catch(Exception) { }
+            }
+            return true;
+        }
 
         private int[,] Random(int[,] input)
         {
-            while (true)
-            {
-                int x = rand.Next(boardSize);
-                int y = rand.Next(boardSize);
-                if (board[x, y] == 0)
+            
+                while (!CannotRand(board))
                 {
-                    board[x, y] = 2;
-                    break;
+                    int x = rand.Next(boardSize);
+                    int y = rand.Next(boardSize);
+                    if (board[x, y] == 0)
+                    {
+                        board[x, y] = 2;
+                        break;
+                    }
                 }
+            if (CannotRand(board) ==true)
+            {
+                checkGameOver = checknear();
             }
             return input;
         }
@@ -82,6 +122,7 @@ namespace twozerofoureight
                     if (j > 0 && buffer[j] != 0 && buffer[j] == buffer[j - 1])
                     {
                         buffer[j - 1] *= 2;
+                        score2 += buffer[j - 1];
                         buffer[j] = 0;
                     }
                 }
@@ -134,6 +175,7 @@ namespace twozerofoureight
                     if (j > 0 && buffer[j] != 0 && buffer[j] == buffer[j - 1])
                     {
                         buffer[j - 1] *= 2;
+                        score2 += buffer[j - 1];
                         buffer[j] = 0;
                     }
                 }
@@ -188,6 +230,7 @@ namespace twozerofoureight
                     if (j > 0 && buffer[j] != 0 && buffer[j] == buffer[j - 1])
                     {
                         buffer[j - 1] *= 2;
+                        score2 += buffer[j - 1];
                         buffer[j] = 0;
                     }
                 }
@@ -239,6 +282,7 @@ namespace twozerofoureight
                     if (j > 0 && buffer[j] != 0 && buffer[j] == buffer[j - 1])
                     {
                         buffer[j - 1] *= 2;
+                        score2 += buffer[j - 1];
                         buffer[j] = 0;
                     }
                 }
@@ -260,5 +304,6 @@ namespace twozerofoureight
             board = Random(board);
             NotifyAll();
         }
+        
     }
 }

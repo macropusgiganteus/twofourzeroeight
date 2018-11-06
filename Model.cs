@@ -7,8 +7,15 @@ using System.Collections;
 
 namespace twozerofoureight
 {
+    
     public class Model
     {
+        public int score2 =0;
+        public bool checkGameOver;
+        public bool GameOver()
+        {
+            return checkGameOver;
+        }
         protected ArrayList oList;
 
         public Model()
@@ -27,6 +34,11 @@ namespace twozerofoureight
         {
             oList.Add(m);
         }
+        public int Getscore()
+        {
+            return score2;
+        }
+
 
     }
 }
